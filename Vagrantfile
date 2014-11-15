@@ -18,22 +18,59 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Create symlinks to access graph files
   config.vm.provision "shell", inline: "mkdir -p /var/lib/puppet/state/graphs && ln -sf /vagrant /var/lib/puppet/state/graphs"
 
-  # Boostrap docker image with shell provisioner.
+  # Boostrap docker containers with shell provisioner.
   config.vm.provision "shell" do |s|
     s.path = "bootstrap.sh"
     s.args = "3.6.2-1"
   end
 
-  # Accessed using ssh://dev@172.17.0.6/repos/git/jenkins
-  config.vm.define "jenkins" do |d|
-    d.vm.hostname = "jenkins.dev.local"
+  config.vm.define "git" do |r|
+    r.vm.hostname = "git.dev.local"
 
-    d.vm.provider "docker" do |d|
+    r.vm.provider "docker" do |d|
       d.cmd     = DOCKER_CMD
       d.image   = "#{DOCKER_IMAGE_REPO}/#{DOCKER_IMAGE_NAME}:#{DOCKER_IMAGE_TAG}"
       d.has_ssh = true
       d.privileged = true
-      d.name = "jenkins.dev.local"
+      d.name = "git"
+    end
+  end
+
+  config.vm.define "nexus" do |n|
+    n.vm.hostname = "nexus.dev.local"
+
+    n.vm.provider "docker" do |d|
+      d.cmd     = DOCKER_CMD
+      d.image   = "#{DOCKER_IMAGE_REPO}/#{DOCKER_IMAGE_NAME}:#{DOCKER_IMAGE_TAG}"
+      d.has_ssh = true
+      d.privileged = true
+      d.name = "nexus"
+    end
+  end
+
+  config.vm.define "jenkins" do |j|
+    j.vm.hostname = "jenkins.dev.local"
+
+    j.vm.provider "docker" do |d|
+      d.cmd     = DOCKER_CMD
+      d.image   = "#{DOCKER_IMAGE_REPO}/#{DOCKER_IMAGE_NAME}:#{DOCKER_IMAGE_TAG}"
+      d.has_ssh = true
+      d.privileged = true
+      d.name = "jenkins"
+      d.link "git:git"
+      d.link "nexus:nexus"
+    end
+  end
+
+  config.vm.define "slave1" do |s|
+    s.vm.hostname = "slave1.dev.local"
+
+    s.vm.provider "docker" do |d|
+      d.cmd     = DOCKER_CMD
+      d.image   = "#{DOCKER_IMAGE_REPO}/#{DOCKER_IMAGE_NAME}:#{DOCKER_IMAGE_TAG}"
+      d.has_ssh = true
+      d.privileged = true
+      d.name = "slave1"
     end
   end
 end

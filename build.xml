@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  Build, dist/package and deploy VIM hosted and server editions. 
+  This is an initial straight port of the existing Makefile process.
+  -->
+
+<project name="JenkinsCI" default="default" phingVersion="2.7.0" description="Jenkins continuous integration full setup.">
+
+	<property environment="env" />
+
+	<property name="build.dir" value="${project.basedir}/build" />
+
+	<target name="default" depends="" description="Prints out available targets in this project.">
+		<exec command="phing -l" passthru="true" />
+	</target>
+
+	<!-- Intialization tasksf or all targets -->
+	<target name="init">
+		<mkdir dir="${build.dir}" />
+	</target>
+
+	<target name="clean" description="Deletes the build dir">
+		<delete dir="${build.dir}" />
+	</target>
+	
+	
+
+	<target name="puppet-generate-module" description="Generates an empty module this dir. Requires argument option.modulename.">
+		<property name="option.company" value="mtbvang" />
+		<property name="option.modulename" value="jenkinsci" />
+		<exec command="puppet module generate --skip-interview ${option.company}-${option.modulename}" passthru="true" />
+	</target>
+
+</project>

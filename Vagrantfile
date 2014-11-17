@@ -32,7 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       d.image   = "#{DOCKER_IMAGE_REPO}/#{DOCKER_IMAGE_NAME}:#{DOCKER_IMAGE_TAG}"
       d.has_ssh = true
       d.privileged = true
-      d.name = "git"
+      d.name = "mtb-git"
     end
   end
 
@@ -44,7 +44,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       d.image   = "#{DOCKER_IMAGE_REPO}/#{DOCKER_IMAGE_NAME}:#{DOCKER_IMAGE_TAG}"
       d.has_ssh = true
       d.privileged = true
-      d.name = "nexus"
+      d.name = "mtb-nexus"
     end
   end
 
@@ -56,9 +56,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       d.image   = "#{DOCKER_IMAGE_REPO}/#{DOCKER_IMAGE_NAME}:#{DOCKER_IMAGE_TAG}"
       d.has_ssh = true
       d.privileged = true
-      d.name = "jenkins"
-      d.link "git:git"
-      d.link "nexus:nexus"
+      d.name = "mtb-jenkins"
+      d.link "mtb-git:mtb-git"
+      d.link "mtb-nexus:mtb-nexus"
     end
   end
 
@@ -70,7 +70,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       d.image   = "#{DOCKER_IMAGE_REPO}/#{DOCKER_IMAGE_NAME}:#{DOCKER_IMAGE_TAG}"
       d.has_ssh = true
       d.privileged = true
-      d.name = "slave1"
+      d.name = "mtb-slave1"
     end
   end
 end

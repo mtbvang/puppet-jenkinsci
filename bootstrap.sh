@@ -12,7 +12,7 @@ fi
 
 # Install Java 8
 touch /etc/init.d/cgroup-lite
-DEBIAN_FRONTEND=noninteractive apt-get install -y ssh software-properties-common cgroup-lite && apt-get clean && apt-get update
+apt-get install -y ssh software-properties-common cgroup-lite && apt-get clean && apt-get update
 add-apt-repository -y ppa:webupd8team/java
 apt-get update
 echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections && echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
@@ -20,7 +20,7 @@ apt-get -y install oracle-java8-installer
 
 # Install puppet
 add-apt-repository multiverse
-DEBIAN_FRONTEND=noninteractive apt-get install -y wget dialog
+apt-get install -y wget dialog
 wget https://apt.puppetlabs.com/puppetlabs-release-trusty.deb
 dpkg -i puppetlabs-release-trusty.deb
 apt-get update

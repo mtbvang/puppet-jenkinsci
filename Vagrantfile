@@ -14,6 +14,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   DOCKER_SYNC_FOLDER_HOST = "/home/dev/code"
   DOCKER_SYNC_FOLDERL_GUEST = "/vagrant_data"
   DOCKER_CMD = ["/usr/sbin/sshd", "-D", "-e"]
+    
+  DOCKER_NAMESPACE_PREFIX = "mtb-"
 
   # Create symlinks to access graph files
   config.vm.provision "shell", inline: "mkdir -p /var/lib/puppet/state/graphs && ln -sf /vagrant /var/lib/puppet/state/graphs"
@@ -32,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       d.image   = "#{DOCKER_IMAGE_REPO}/#{DOCKER_IMAGE_NAME}:#{DOCKER_IMAGE_TAG}"
       d.has_ssh = true
       d.privileged = true
-      d.name = "mtb-git"
+      d.name = "#{DOCKER_NAMESPACE_PREFIX}git"
     end
   end
 
@@ -44,7 +46,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       d.image   = "#{DOCKER_IMAGE_REPO}/#{DOCKER_IMAGE_NAME}:#{DOCKER_IMAGE_TAG}"
       d.has_ssh = true
       d.privileged = true
-      d.name = "mtb-nexus"
+      d.name = "#{DOCKER_NAMESPACE_PREFIX}nexus"
     end
   end
 
@@ -56,9 +58,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       d.image   = "#{DOCKER_IMAGE_REPO}/#{DOCKER_IMAGE_NAME}:#{DOCKER_IMAGE_TAG}"
       d.has_ssh = true
       d.privileged = true
-      d.name = "mtb-jenkins"
-      d.link "mtb-git:mtb-git"
-      d.link "mtb-nexus:mtb-nexus"
+      d.name = "#{DOCKER_NAMESPACE_PREFIX}jenkins"
+      d.link "#{DOCKER_NAMESPACE_PREFIX}git:#{DOCKER_NAMESPACE_PREFIX}git"
+      d.link "#{DOCKER_NAMESPACE_PREFIX}nexus:#{DOCKER_NAMESPACE_PREFIX}nexus"
     end
   end
 
@@ -70,7 +72,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       d.image   = "#{DOCKER_IMAGE_REPO}/#{DOCKER_IMAGE_NAME}:#{DOCKER_IMAGE_TAG}"
       d.has_ssh = true
       d.privileged = true
-      d.name = "mtb-slave1"
+      d.name = "#{DOCKER_NAMESPACE_PREFIX}slave1"
     end
   end
 end
